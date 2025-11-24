@@ -1,6 +1,22 @@
+CREATE TABLE IF NOT EXISTS geos(
+    id INTEGER AUTO_INCREMENT,
+    lat DECIMAL NOT NULL,
+    lng DECIMAL NOT NULL
+
+    CONSTRAINT pk_geos PRIMARY KEY (id)
+);
+
 CREATE TABLE IF NOT EXISTS addresses(
     id INTEGER AUTO_INCREMENT,
     street VARCHAR(30) NOT NULL,
+    suite VARCHAR(15) NOT NULL,
+    city VARCHAR(20) NOT NULL,
+    zipcode VARCHAR(15) NOT NULL,
+    geoId INTEGER NOT NULL,
+
+    CONSTRAINT pk_addresses PRIMARY KEY (id),
+    CONSTRAINT fk_addresses_geos FOREIGN KEY (geoId)
+    REFERENCES geos(id)
 );
 
 CREATE TABLE IF NOT EXISTS companies(
@@ -23,6 +39,8 @@ CREATE TABLE IF NOT EXISTS users(
     companyId INTEGER NOT NULL,
 
     CONSTRAINT pk_users PRIMARY KEY (id),
+    CONSTRAINT fk_users_addresses FOREIGN KEY (addressId)
+    REFERENCES addresses(id),
     CONSTRAINT fk_users_companies FOREIGN KEY (companyId)
     REFERENCES companies(id)
 );
